@@ -14,16 +14,16 @@ function App() {
     const loadedCollaborators = Object.keys(jsonFiles)
       .filter(path => !path.includes('_plantilla.json'))
       .map(path => jsonFiles[path].default || jsonFiles[path]);
-    
+
     setCollaborators(loadedCollaborators);
   }, []);
 
   const uniqueSections = [...new Set(collaborators.map(c => c.Seccion).filter(Boolean))].sort();
   const availableSections = ['Todas', ...uniqueSections];
 
-  const filteredCollaborators = filter === 'Todas' 
-    ? collaborators 
-    : collaborators.filter(c => c.Seccion === filter);
+  const filteredCollaborators = filter === 'Todas'
+    ? collaborators
+    : collaborators.filter(c => c.Seccion === filter || c.Seccion === "Profesor");
 
   return (
     <div className="app-container">
@@ -47,8 +47,8 @@ function App() {
             <span className="filter-label">Filtrar por Sección:</span>
             <div className="filter-buttons">
               {availableSections.map(sec => (
-                <button 
-                  key={sec} 
+                <button
+                  key={sec}
                   className={`filter-btn ${filter === sec ? 'active' : ''}`}
                   onClick={() => setFilter(sec)}
                 >
