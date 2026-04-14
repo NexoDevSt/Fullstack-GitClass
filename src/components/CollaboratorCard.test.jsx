@@ -7,7 +7,8 @@ describe('CollaboratorCard', () => {
     nombre_completo: 'Test User',
     usuario_github: 'testuser123',
     comentario_libre: 'This is a test bio.',
-    color: '#123456'
+    color: '#123456',
+    Seccion: '003D'
   };
 
   it('renders collaborator information correctly', () => {
@@ -15,6 +16,7 @@ describe('CollaboratorCard', () => {
     
     expect(screen.getByText('Test User')).toBeInTheDocument();
     expect(screen.getByText('This is a test bio.')).toBeInTheDocument();
+    expect(screen.getByText('003D')).toBeInTheDocument();
     
     const link = screen.getByRole('link', { name: /ver perfil de github/i });
     expect(link).toHaveAttribute('href', 'https://github.com/testuser123');

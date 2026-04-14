@@ -85,8 +85,8 @@ body {
 /* Main */
 .app-main {
   flex: 1;
-  padding: 3rem 1rem;
-  max-width: 1200px;
+  padding: 3rem 2rem;
+  max-width: 100%;
   margin: 0 auto;
   width: 100%;
 }
@@ -122,6 +122,21 @@ body {
   width: 100%;
 }
 
+.card-watermark {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #002855;
+  opacity: 0.05;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  transform: rotate(-10deg);
+  transform-origin: top right;
+}
+
 .card-avatar {
   width: 100px;
   height: 100px;
@@ -131,6 +146,8 @@ body {
   border: 3px solid #FFFFFF;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   background-color: #FFFFFF;
+  position: relative;
+  z-index: 1;
 }
 
 .card-content {
@@ -139,6 +156,8 @@ body {
   display: flex;
   flex-direction: column;
   flex: 1;
+  position: relative;
+  z-index: 1;
 }
 
 .card-title {

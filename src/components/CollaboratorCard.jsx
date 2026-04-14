@@ -1,7 +1,7 @@
 import React from 'react';
 
 const CollaboratorCard = ({ data }) => {
-  const { nombre_completo, usuario_github, comentario_libre, color } = data;
+  const { nombre_completo, usuario_github, comentario_libre, color, Seccion } = data;
   const avatarUrl = `https://github.com/${usuario_github}.png`;
   const githubUrl = `https://github.com/${usuario_github}`;
 
@@ -11,6 +11,7 @@ const CollaboratorCard = ({ data }) => {
   return (
     <div className="collaborator-card" style={{ borderColor: color, borderWidth: color ? '2px' : '0', borderStyle: 'solid' }}>
       <div className="card-accent" style={customStyle}></div>
+      {Seccion && <div className="card-watermark">{Seccion}</div>}
       <img
         src={avatarUrl}
         alt={`Avatar de ${nombre_completo}`}

@@ -80,6 +80,12 @@ describe('Collaborators JSON Format', () => {
         expect(data).toHaveProperty('comentario_libre');
         expect(typeof data.comentario_libre).toBe('string');
         expect(data.comentario_libre.length).toBeLessThanOrEqual(150, 'El comentario debe tener 150 caracteres o menos');
+
+        // Validar Sección
+        expect(data).toHaveProperty('Seccion');
+        expect(typeof data.Seccion).toBe('string');
+        const validSections = ['001D', '003D', 'Profesor', '001D o 003D'];
+        expect(validSections).toContain(data.Seccion);
       });
 
       it('no debe contener lenguaje ofensivo, racista, xenófobo ni menciones a figuras polémicas', () => {

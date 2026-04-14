@@ -23,7 +23,8 @@ Este proyecto es una aplicación React (scaffolded con Vite) para la materia **D
         "nombre_completo": "Tu Nombre y Apellido",
         "usuario_github": "tu-usuario-de-github",
         "comentario_libre": "Un breve mensaje o biografía (máx. 150 caracteres).",
-        "color": "#FFB81C"
+        "color": "#FFB81C",
+        "Seccion": "001D"
       }
       ```
 5. **Realiza un Commit**: `git commit -m "Agrega tarjeta de Tu Nombre"`
