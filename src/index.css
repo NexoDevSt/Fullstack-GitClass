@@ -21,7 +21,7 @@ body {
 
 /* Header */
 .app-header {
-  background-color: #002855;
+  background-color: transparent;
   color: #FFFFFF;
   padding: 3rem 1rem;
   text-align: center;
@@ -262,6 +262,7 @@ body {
 .matrix-enhanced {
   position: relative;
   overflow: hidden;
+  background: #002855;
 }
 
 #matrixCanvas {
@@ -295,5 +296,167 @@ body {
 
   to {
     text-shadow: 0 0 12px rgba(255, 184, 28, 0.8);
+  }
+}
+
+/* Terminal Styles */
+.terminal-container {
+  font-family: "Courier New", monospace;
+  background: rgba(0, 0, 0, 0.9);
+  /* más sólido */
+  color: #00ff88;
+  /* verde hacker */
+  padding: 1.5rem 2rem;
+  border-radius: 10px;
+  border: 1px solid #00ff88;
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+  width: fit-content;
+  min-width: 300px;
+}
+
+/* Líneas ocultas al inicio */
+.terminal-line {
+  color: #00ff88;
+  font-size: 0.95rem;
+  margin: 2px 0;
+  animation: fadeLine 0.3s ease;
+  opacity: 1;
+}
+
+
+/* ACCESO CONCEDIDO */
+.terminal-line.success {
+  color: #FFB81C;
+  font-weight: 700;
+  animation: glowSuccess 0.8s ease forwards 3.3s;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glowSuccess {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+    text-shadow: none;
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    text-shadow: 0 0 8px rgba(255, 184, 28, 0.8);
+  }
+}
+
+.terminal-line {
+  color: #F4F4F4;
+  font-size: 0.95rem;
+  margin: 2px 0;
+  animation: fadeLine 0.3s ease;
+}
+
+.terminal-line.success {
+  color: #FFB81C;
+  font-weight: 700;
+  text-shadow: 0 0 8px rgba(255, 184, 28, 0.8);
+}
+
+/* Entrada */
+@keyframes fadeLine {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+@keyframes terminalFadeOut {
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+.terminal-fullscreen::before {
+  content: "";
+  box-shadow: inset 0 0 80px rgba(0, 255, 136, 0.15);
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(to bottom,
+      rgba(255, 255, 255, 0.05) 0px,
+      rgba(255, 255, 255, 0.05) 1px,
+      transparent 2px,
+      transparent 4px);
+  pointer-events: none;
+  z-index: 2;
+  animation: scanMove 0.2s linear infinite;
+}
+
+@keyframes scanMove {
+  0% {
+    background-position-y: 0;
+  }
+
+  100% {
+    background-position-y: 4px;
+  }
+}
+
+/* Terminal centrada tipo sistema */
+.terminal-fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  overflow: hidden;
+  animation: crtFlicker 0.15s infinite;
+  font-family: "Courier New", monospace;
+  color: #00ff88;
+  text-shadow:
+    0 0 2px #00ff88,
+    0 0 5px rgba(0, 255, 136, 0.5);
+}
+
+.terminal-fullscreen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center,
+      rgba(0, 255, 136, 0.08),
+      transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Fade IN de cards */
+.fade-in {
+  animation: fadeInCards 0.8s ease;
+}
+
+@keyframes fadeInCards {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
