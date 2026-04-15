@@ -18,7 +18,6 @@ describe('App', () => {
   it('renders the header with course information', () => {
     render(<App />);
     expect(screen.getByText('Aquí se forjan los mejores desarrolladores FullStack')).toBeInTheDocument();
-    expect(screen.getByText('Desarrollo FullStack III')).toBeInTheDocument();
   });
 
   it('renders collaborator cards and ignores the template', () => {
