@@ -85,28 +85,54 @@ jobs:
       - name: Ejecutar Pruebas Automatizadas (Vitest)
         run: npm run test -- --run > test_output.txt 2>&1 || true
 
-      - name: Comentar resultados en PR
+      - name: Comentar error en PR
         if: failure()
         uses: actions/github-script@v7
         with:
           script: |
             const fs = require('fs');
 
-            let body = "## ❌ Falló la validación del PR\n\n";
+            let body = "##  Falló la validación del PR\n\n";
 
             const authError = `${{ steps.auth.outputs.error_msg }}`;
             if (authError && authError.trim() !== "") {
-              body += "### 🔒 Error de permisos\n";
+              body += "###  Error de permisos\n";
               body += authError + "\n\n";
             }
 
             if (fs.existsSync('test_output.txt')) {
               const logs = fs.readFileSync('test_output.txt', 'utf8').slice(0, 5000);
-              body += "### 🧪 Resultado de tests\n";
+              body += "###  Resultado de tests\n";
               body += "```bash\n" + logs + "\n```\n";
             }
 
-            body += "\n👉 Revisa los errores y vuelve a intentar.";
+            body += "\n Revisa los errores y vuelve a intentar.";
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });
+
+      #  Comentario si todo sale bien
+      - name: Comentar éxito en PR
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = `
+            ##  PR aprobado correctamente 🎉
+
+            🚀 ¡Excelente trabajo!
+
+            Tu contribución cumple con todas las validaciones:
+            -  Estructura correcta
+            -  Autoría válida
+            -  Tests pasando
+
+            Sigue así, ¡vas por muy buen camino!
+            `;
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
