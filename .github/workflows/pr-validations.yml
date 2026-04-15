@@ -1,7 +1,7 @@
 name: Validar Estudiantes PR
 
 on:
-  pull_request_target:
+  pull_request:
     branches: [ "main" ]
 
 jobs:
@@ -26,23 +26,18 @@ jobs:
         uses: tj-actions/changed-files@v44
         
       - name: Validar Autoría Estrícta (Zero-Trust)
-        id: auth
         shell: bash
         env:
           ACTOR: ${{ github.actor }}
           OWNER: ${{ github.repository_owner }}
           FILES: ${{ steps.files.outputs.all_changed_files }}
         run: |
-          set +e
-          ERROR_MSG=""
-
           echo "Autor del PR: $ACTOR"
           
           # Nos aseguramos de que el profesor (dueño del repositorio) no sea bloqueado
           # a la hora de hacer PRs globales o mantenciones.
           if [[ "$ACTOR" == "$OWNER" ]]; then
             echo "Propietario del repositorio detectado. Reglas de integridad de archivos deshabilitadas."
-            echo "error_msg=" >> $GITHUB_OUTPUT
             exit 0
           fi
           
@@ -61,82 +56,18 @@ jobs:
               if [[ "$FILE_LOWER" != "$EXPECTED_FILE" ]]; then
                 echo "::error title=Autoría Denegada::❌ RECHAZADO: Intentaste modificar o subir '$file', pero tu cuenta que abre el PR es '$ACTOR'."
                 echo "::error title=Qué debes modificar::Solo tienes permitido crear tu propio archivo: '$EXPECTED_FILE'."
-                ERROR_MSG="❌ Intentaste modificar '$file'. Solo puedes modificar '$EXPECTED_FILE'."
-                break
+                exit 1
               fi
               
             else
               # Si el estudiante intenta tocar la lógica de React, los estilos, Readme, o los test para burlarlos... Falla.
               echo "::error title=Violación de Privilegios::❌ RECHAZADO: Intentaste modificar '$file'. Como estudiante, no tienes permitido tocar los archivos centrales del repositorio."
-              ERROR_MSG="❌ No puedes modificar '$file'. Solo tu archivo personal en src/collaborators/."
-              break
+              exit 1
             fi
           done
-
-          echo "error_msg=$ERROR_MSG" >> $GITHUB_OUTPUT
-
-          if [[ "$ERROR_MSG" != "" ]]; then
-            exit 1
-          fi
           
       - name: Instalar Dependencias (Limpio)
         run: npm ci
         
       - name: Ejecutar Pruebas Automatizadas (Vitest)
-        run: npm run test -- --run > test_output.txt 2>&1 || true
-
-      - name: Comentar error en PR
-        if: failure()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const fs = require('fs');
-
-            let body = "##  Falló la validación del PR\n\n";
-
-            const authError = `${{ steps.auth.outputs.error_msg }}`;
-            if (authError && authError.trim() !== "") {
-              body += "###  Error de permisos\n";
-              body += authError + "\n\n";
-            }
-
-            if (fs.existsSync('test_output.txt')) {
-              const logs = fs.readFileSync('test_output.txt', 'utf8').slice(0, 5000);
-              body += "###  Resultado de tests\n";
-              body += "```bash\n" + logs + "\n```\n";
-            }
-
-            body += "\n Revisa los errores y vuelve a intentar.";
-
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body
-            });
-
-      #  Comentario si todo sale bien
-      - name: Comentar éxito en PR
-        if: success()
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const body = `
-            ##  PR aprobado correctamente 🎉
-
-            🚀 ¡Excelente trabajo!
-
-            Tu contribución cumple con todas las validaciones:
-            -  Estructura correcta
-            -  Autoría válida
-            -  Tests pasando
-
-            Sigue así, ¡vas por muy buen camino!
-            `;
-
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body
-            });
+        run: npm run test -- --run
