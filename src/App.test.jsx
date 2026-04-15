@@ -17,7 +17,7 @@ vi.mock('./collaborators/*.json', () => {
 describe('App', () => {
   it('renders the header with course information', () => {
     render(<App />);
-    expect(screen.getByText('Nuestros Colaboradores - Duoc UC')).toBeInTheDocument();
+    expect(screen.getByText('Aquí se forjan los mejores desarrolladores FullStack')).toBeInTheDocument();
     expect(screen.getByText('Desarrollo FullStack III')).toBeInTheDocument();
   });
 
